@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NSFW Examples - MeggelzCommissions</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #111; /* in case video fails */
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 40px;
+      color: white;
+      margin-top: 20px;
+      font-family: 'Lobster', cursive;
+    }
+
+    /* Navigation / Back Button */
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+      margin-bottom: 25px;
+    }
+
+    .nav-btn {
+      display: inline-block;
+      padding: 10px 22px;
+      background-color: rgba(211, 47, 47, 0.9);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .nav-btn:hover {
+      background-color: #f44336;
+      transform: translateY(-2px);
+    }
+
+    /* Blur effect until verified */
+    .content-container {
+      max-width: 800px;
+      margin: 20px auto 50px auto;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 16px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      filter: blur(12px); /* Blurs content initially */
+      pointer-events: none; /* Prevents interacting until confirmed */
+      transition: filter 0.4s ease;
+    }
+
+    /* Active class when verified */
+    .content-container.verified {
+      filter: blur(0);
+      pointer-events: auto;
+    }
+
+    .section-title {
+      color: #d32f2f;
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .warning-box {
+      background-color: #ffebee;
+      border-left: 4px solid #f44336;
+      padding: 12px 18px;
+      border-radius: 6px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: #b71c1c;
+    }
+
+    /* Image Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #ef9a9a;
+    }
+
+    /* ---------------------------------- */
+    /* AGE VERIFICATION POPUP STYLES */
+    /* ---------------------------------- */
+    .age-gate-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .age-gate-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      border: 2px solid #ffb6c1;
+    }
+
+    .age-gate-card h2 {
+      color: #d32f2f;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .age-gate-card p {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .age-gate-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .age-btn {
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-confirm {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .btn-confirm:hover {
+      background-color: #d32f2f;
+      transform: translateY(-2px);
+    }
+
+    .btn-deny {
+      background-color: #e0e0e0;
+      color: #333;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-deny:hover {
+      background-color: #d6d6d6;
+    }
+
+    @media (max-width: 600px) {
+      .content-container {
+        margin: 15px;
+        padding: 20px;
+      }
+      .age-gate-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AGE VERIFICATION OVERLAY -->
+  <div class="age-gate-overlay" id="ageGate">
+    <div class="age-gate-card">
+      <h2>Age Verification 🔞</h2>
+      <p>This section contains adult content (18+). Please confirm your age before proceeding.</p>
+      <div class="age-gate-buttons">
+        <button class="age-btn btn-confirm" onclick="confirmAge()">I am 18 or older</button>
+        <a href="Megs coms.html" class="age-btn btn-deny">Under 18 / Exit</a>
+      </div>
+    </div>
+  </div>
+
+  <video class="background-video" autoplay muted loop playsinline id="bgVideo">
+    <source src="background.mp4" type="video/mp4">
+  </video>
+
+  <h1 style="font-size: 40px; font-family: 'Lobster', cursive;">Meggelz Commissions</h1>
+
+  <div class="nav-links">
+    <a href="Megs coms.html" class="nav-btn">← Back to Terms & Conditions</a>
+  </div>
+
+  <div class="content-container" id="nsfwContent">
+    
+    <h2 class="section-title">NSFW Examples 🔞</h2>
+    
+    <div class="warning-box">
+      <strong>18+ Warning:</strong> This section contains mature content intended exclusively for adult viewers.
+    </div>
+
+    <!-- Gallery Grid for NSFW Works -->
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="nsfw-example1.jpg" alt="NSFW Work 1">
+      </div>
+      <div class="gallery-item">
+        <img src="nsfw-example2.jpg" alt="NSFW Work 2">
+      </div>
+      <div class="gallery-item">
+        <img src="nsfw-example3.jpg" alt="NSFW Work 3">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Handles video playback
+    const video = document.getElementById('bgVideo');
+    if (video) {
+      video.muted = true;
+      video.play().catch(error => console.log("Autoplay check:", error));
+    }
+
+    // Unlocks content when "I am 18 or older" is clicked
+    function confirmAge() {
+      document.getElementById('ageGate').style.display = 'none';
+      document.getElementById('nsfwContent').classList.add('verified');
+    }
+  </script>
+
+</body>
+</html>
